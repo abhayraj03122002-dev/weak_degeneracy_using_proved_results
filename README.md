@@ -231,13 +231,13 @@ pip install -r requirements.txt
 
 ## 📈 Future Work
 
-* Improve search using **memoization / dynamic programming**
-* Introduce **heuristic pruning strategies**
-* Support **large-scale graphs**
-* Add **graph visualization tools**
-* Optimize degeneracy computation to ( O(V + E) )
+* Try parallel programming to speed up the recursive search.
+* Use memoization to avoid solving the same subproblem again.
+* Improve the algorithm by reducing unnecessary branches.
+* Find better theoretical bounds to reduce the search range.
 
 ---
+
 
 ## 🎯 Research Motivation
 
