@@ -24,8 +24,6 @@ The program identifies special classes of graphs (such as trees, planar graphs, 
   - Cycle lengths
   - Forbidden cycle verification
   - Weak degeneracy using best bounds
-- Interactive CLI interface
-
 ---
 
 ## 🧠 Key Concepts
