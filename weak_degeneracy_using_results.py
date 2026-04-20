@@ -1,15 +1,24 @@
 import math
 import networkx as nx
-
-
+# -------------------------------
+# INPUT GRAPH
+# -------------------------------
+def input_graph():
+    G = nx.Graph()
+    n = int(input("Enter number of vertices: "))
+    m = int(input("Enter number of edges: "))
+    G.add_nodes_from(range(n))
+    print("Enter edges (u v):")
+    for _ in range(m):
+        u, v = map(int, input().split())
+        G.add_edge(u, v)
+    return G
 # -------------------------------
 # COMPLETE GRAPH CHECK
 # -------------------------------
 def is_complete_graph(G):
     n = len(G.nodes)
     return G.number_of_edges() == n * (n - 1) // 2
-
-
 # -------------------------------
 # COMPLETE BIPARTITE CHECK
 # -------------------------------
@@ -25,11 +34,9 @@ def is_complete_bipartite_graph(G):
         return True, m, n
 
     return False, None, None
-
-
-# -------------------------------
+# ----------------------------------
 # ICOSAHEDRAL CHECK
-# -------------------------------
+# ----------------------------------
 def is_icosahedral_graph(G):
     if len(G.nodes) == 12 and len(G.edges) == 30:
         degrees = [d for _, d in G.degree()]
@@ -63,8 +70,7 @@ def has_cycle_length_k(G, k):
             return True
 
     return False
-
-
+    
 # -------------------------------
 # ALL CYCLE LENGTHS
 # -------------------------------
@@ -78,8 +84,7 @@ def all_cycle_lengths(G):
             cycles.add(k)
 
     return cycles
-
-
+    
 # -------------------------------
 # FORBIDDEN SET CHECK
 # -------------------------------
@@ -97,7 +102,6 @@ def satisfies_forbidden_set(G, forbidden):
 
     # Step 3: no forbidden cycle found
     return True
-
 
 # -------------------------------
 # WEAK DEGENERACY
@@ -170,82 +174,8 @@ def weak_degeneracy(G):
     else:
        return None
 
-    
-
-
-# -------------------------------
-# MENU
-# -------------------------------
-print("\nChoose Graph Type")
-print("1 General Graph")
-print("2 Path Graph")
-print("3 Cycle Graph")
-print("4 Complete Graph")
-print("5 Complete Bipartite Graph")
-print("6 Wheel Graph")
-print("7 Star Graph")
-print("8 Grid Graph")
-print("9 Tree (Binary)")
-print("10 Petersen Graph")
-print("11 Icosahedral Graph")
-
-choice = int(input("Enter choice: "))
-
-
-# -------------------------------
-# INPUT
-# -------------------------------
-if choice == 1:
-
-    n = int(input("Vertices: "))
-    m = int(input("Edges: "))
-
-    G = nx.Graph()
-    G.add_nodes_from(range(n))
-
-    print("Enter edges:")
-    for _ in range(m):
-        u, v = map(int, input().split())
-        G.add_edge(u, v)
-
-elif choice == 2:
-    G = nx.path_graph(int(input("n: ")))
-
-elif choice == 3:
-    G = nx.cycle_graph(int(input("n: ")))
-
-elif choice == 4:
-    G = nx.complete_graph(int(input("n: ")))
-
-elif choice == 5:
-    m = int(input("m: "))
-    n = int(input("n: "))
-    G = nx.complete_bipartite_graph(m, n)
-
-elif choice == 6:
-    G = nx.wheel_graph(int(input("n: ")))
-
-elif choice == 7:
-    G = nx.star_graph(int(input("n: ")) - 1)
-
-elif choice == 8:
-    m = int(input("Rows: "))
-    n = int(input("Cols: "))
-    G = nx.grid_2d_graph(m, n)
-
-elif choice == 9:
-    G = nx.balanced_tree(2, int(input("height: ")))
-
-elif choice == 10:
-    G = nx.petersen_graph()
-
-elif choice == 11:
-    G = nx.icosahedral_graph()
-
-else:
-    print("Invalid")
-    exit()
-
+#-------Input-------------------
+G = input_graph()
 
 # -------------------------------
 # COMPUTATION
@@ -253,6 +183,6 @@ else:
 wd = weak_degeneracy(G)
 
 if wd is None:
-    print("Not classified. Try to find d(G) or wd(G)")
+    print("Not classified")
 else:
     print("weak degeneracy =", wd)
