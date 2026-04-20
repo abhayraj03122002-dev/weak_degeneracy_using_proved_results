@@ -135,16 +135,16 @@ The repository follows a **three-step pipeline**:
 
 ## ▶️ Usage
 
-### Step 1: Compute Degeneracy
-
-```bash
-python degeneracy.py
-```
-
-### Step 2: Apply Theoretical Bounds
+### Step 1: Apply Theoretical Bounds
 
 ```bash
 python weak_degeneracy_theory.py
+```
+
+### Step 2: Compute Degeneracy
+
+```bash
+python degeneracy.py
 ```
 
 ### Step 3: Refine Using Search
