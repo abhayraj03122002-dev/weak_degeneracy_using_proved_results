@@ -6,10 +6,26 @@ def input_graph():
     G = nx.Graph()
     n = int(input("Enter number of vertices: "))
     m = int(input("Enter number of edges: "))
+    max_edges = n * (n - 1) // 2
+    if m > max_edges:
+        print("Invalid graph!")
+        return None
     G.add_nodes_from(range(n))
     print("Enter edges (u v):")
     for _ in range(m):
         u, v = map(int, input().split())
+        #  vertex range check
+        if u < 0 or u >= n or v < 0 or v >= n:
+            print(f"Invalid: vertex out of range (0 to {n-1})")
+            return None
+        #  self-loop check
+        if u == v:
+            print("Invalid: self-loop not allowed")
+            return None
+        #  duplicate edge check
+        if G.has_edge(u, v):
+            print("Invalid: duplicate edge")
+            return None
         G.add_edge(u, v)
     return G
 # -------------------------------
@@ -35,5 +51,8 @@ def degeneracy(G):
     return max_min_degree
 #-------Input-------------------
 G = input_graph()
-d = degeneracy(G)
-print("\nDegeneracy of graph <=", d)
+if G is None:
+    print("Graph input failed")
+else:
+     d = degeneracy(G)
+     print("\nDegeneracy of graph <=", d)
