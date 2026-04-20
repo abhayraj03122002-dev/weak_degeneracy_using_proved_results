@@ -202,9 +202,9 @@ Weak Degeneracy(G) = 1
 ```
 Input Graph
      ↓
-Compute Degeneracy (Upper Bound)
-     ↓
 Apply Theoretical Results
+     ↓
+Compute Degeneracy (Upper Bound)
      ↓
 Refine via Bounded Search
      ↓
