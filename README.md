@@ -2,77 +2,138 @@
 
 ## 📌 Overview
 
-This repository focuses on the **computation of weak degeneracy of graphs**, which is generally hard to compute directly.
+This repository focuses on the **computation of weak degeneracy of graphs**, a structural parameter that is generally **difficult to compute directly**.
 
-To address this, we implement a **multi-strategy framework**:
+To address this, we implement a **multi-strategy framework** combining:
 
-* Use **theoretical results** for direct computation (when applicable)
-* Use **degeneracy as an upper bound**
-* Perform **optimized search within a bounded range**
+* **Theoretical graph results**
+* **Algorithmic upper bounds**
+* **Optimized bounded search**
 
-The repository contains three Python programs that together provide a practical and efficient approach.
+This hybrid approach significantly reduces computational complexity compared to naive brute-force methods.
+
+---
+
+## 📖 Mathematical Background
+
+### 🔹 Degeneracy
+
+A graph ( G ) is said to be **d-degenerate** if every subgraph of ( G ) contains a vertex of degree at most ( d ).
+
+Equivalently:
+
+> Degeneracy is the smallest integer ( d ) such that vertices can be removed iteratively with degree ≤ ( d ).
+
+---
+
+### 🔹 Weak Degeneracy
+
+Weak degeneracy generalizes the deletion process by allowing controlled reductions via a function ( f(v) ), subject to constraints.
+
+It is computationally harder because:
+
+* It involves **global feasibility conditions**
+* Requires **search over possible assignments**
+
+---
+
+### 🔹 Key Relation
+
+```
+weak degeneracy(G) ≤ degeneracy(G)
+```
+
+This inequality is central to our approach.
+
+---
+
+## ⚙️ Algorithmic Framework
+
+The repository follows a **three-step pipeline**:
+
+### Step 1: Compute Degeneracy (Upper Bound)
+
+* Use a greedy algorithm:
+
+  * Repeatedly remove vertex with minimum degree
+* Output gives:
+
+  ```
+  upper bound for weak degeneracy
+  ```
+
+---
+
+### Step 2: Apply Theoretical Bounds
+
+* Detect special graph classes:
+
+  * Trees
+  * Complete graphs
+  * Complete bipartite graphs
+  * Planar graphs (girth + forbidden cycles)
+  * Icosahedral graph
+* Directly infer weak degeneracy without search
+
+---
+
+### Step 3: Bounded Search Refinement
+
+* Search within range:
+
+  ```
+  [start_d, degeneracy(G)]
+  ```
+* Use recursive deletion feasibility:
+
+  * Assign ( f(v) = d )
+  * Try all valid deletions
+  * Stop early when failure occurs
 
 ---
 
 ## 📂 Files Description
 
-### 1. `weak_degeneracy_theory.py`
+### `weak_degeneracy_theory.py`
 
-* Computes **weak degeneracy using proven theoretical results**
-* Handles special graph classes such as:
-
-  * Trees
-  * Complete graphs
-  * Complete bipartite graphs
-  * Planar graphs (using girth and forbidden cycle conditions)
-  * Icosahedral graph
-* Uses graph properties to **directly return bounds without brute force**
+* Uses **graph-theoretic results**
+* Avoids brute-force computation
+* Efficient for structured graphs
 
 ---
 
-### 2. `degeneracy.py`
+### `degeneracy.py`
 
-* Computes **degeneracy of a graph using its definition**
-* Algorithm:
-
-  * Repeatedly remove the vertex with **minimum degree**
-  * Track the **maximum of these minimum degrees**
-* This value serves as an **upper bound**:
+* Implements **greedy degeneracy algorithm**
+* Time Complexity:
 
   ```
-  weak degeneracy ≤ degeneracy
+  O(V^2)  (current implementation)
+  ```
+* Can be optimized using priority queues
+
+---
+
+### `weak_degeneracy_search.py`
+
+* Implements **recursive backtracking**
+
+* Uses:
+
+  * bounded range
+  * early stopping
+
+* Time Complexity:
+
+  ```
+  Exponential (worst case)
   ```
 
----
-
-### 3. `weak_degeneracy_search.py`
-
-* Computes weak degeneracy using a **bounded search approach**
-
-* Workflow:
-
-  1. Take input range `[start_d, end_d]`
-  2. Assign `f(v) = d` for all vertices
-  3. Check whether graph can be fully reduced using recursive deletion
-  4. Stop early when failure occurs (optimization)
-
-* This reduces computation time significantly compared to naive brute force.
-
----
-
-## ⚙️ Installation
-
-Make sure you have Python installed. Then install dependency:
-
-```bash
-pip install networkx
-```
+  but practically reduced due to pruning
 
 ---
 
 ## ▶️ Usage
-
-Run each file independently:
 
 ### Step 1: Compute Degeneracy
 
@@ -80,7 +141,7 @@ Run each file independently:
 python degeneracy.py
 ```
 
-### Step 2: Use Theoretical Bounds
+### Step 2: Apply Theoretical Bounds
 
 ```bash
 python weak_degeneracy_theory.py
@@ -94,37 +155,7 @@ python weak_degeneracy_search.py
 
 ---
 
-## 🧠 Core Idea
-
-Since computing weak degeneracy directly is expensive:
-
-1. First compute:
-
-   ```
-   degeneracy(G)
-   ```
-2. Then use:
-
-   ```
-   weak degeneracy(G) ≤ degeneracy(G)
-   ```
-3. Finally search in a **restricted range** to find tighter bounds.
-
----
-
-## 🚀 Key Features
-
-* Combines **theory + algorithm + optimization**
-* Avoids unnecessary brute-force computation
-* Uses **early stopping strategy** for efficiency
-* Supports **custom graph input**
-* Built using `networkx` for graph operations
-
----
-
 ## 📊 Input Format
-
-For all programs:
 
 ```
 Enter number of vertices: n
@@ -132,7 +163,7 @@ Enter number of edges: m
 Enter edges (u v):
 ```
 
-Example:
+### Example
 
 ```
 5
@@ -145,18 +176,87 @@ Example:
 
 ---
 
-## 📈 Future Improvements
+## ✅ Example Execution
 
-* Optimize recursive search using **memoization / pruning**
-* Add **file-based graph input (e.g., .txt, .csv)**
-* Extend support for **larger graphs**
-* Provide **visualization of graphs and deletion process**
+```
+Degeneracy(G) = 2
+Search Range = [1, 2]
+
+Weak Degeneracy(G) = 1
+```
+
+---
+
+## 🚀 Key Features
+
+* Hybrid approach: **theory + algorithms + search**
+* Uses **degeneracy as an effective upper bound**
+* Avoids unnecessary brute-force exploration
+* Incorporates **early stopping optimization**
+* Works with **custom graph inputs**
+
+---
+
+## 🔗 How Components Work Together
+
+```
+Input Graph
+     ↓
+Compute Degeneracy (Upper Bound)
+     ↓
+Apply Theoretical Results
+     ↓
+Refine via Bounded Search
+     ↓
+Final Weak Degeneracy
+```
+
+---
+
+## 📦 Requirements
+
+Create a `requirements.txt`:
+
+```
+networkx
+```
+
+Install using:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📈 Future Work
+
+* Improve search using **memoization / dynamic programming**
+* Introduce **heuristic pruning strategies**
+* Support **large-scale graphs**
+* Add **graph visualization tools**
+* Optimize degeneracy computation to ( O(V + E) )
+
+---
+
+## 🎯 Research Motivation
+
+Weak degeneracy is an important structural parameter in graph theory, but:
+
+* Direct computation is **computationally expensive**
+* Few **practical implementations** exist
+
+This project provides:
+
+* A **computational framework**
+* A combination of **theoretical and algorithmic techniques**
+* A **practical tool for experimentation and research**
 
 ---
 
 ## 👤 Author
 
-Abhay Kumar
+**Abhay Kumar**
 MSc Mathematics and Computing
 IIT Bhilai
 
@@ -164,8 +264,9 @@ IIT Bhilai
 
 ## 📌 Note
 
-This project is useful for:
+This repository is useful for:
 
 * Graph Theory research
-* Algorithm design and optimization
-* Understanding structural graph parameters like degeneracy and weak degeneracy
+* Algorithm design
+* Structural graph analysis
+* Academic projects and PhD preparation
