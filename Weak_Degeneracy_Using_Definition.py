@@ -6,10 +6,26 @@ def input_graph():
     G = nx.Graph()
     n = int(input("Enter number of vertices: "))
     m = int(input("Enter number of edges: "))
+    max_edges = n * (n - 1) // 2
+    if m > max_edges:
+        print("Invalid graph!")
+        return None
     G.add_nodes_from(range(n))
     print("Enter edges (u v):")
     for _ in range(m):
         u, v = map(int, input().split())
+        #  vertex range check
+        if u < 0 or u >= n or v < 0 or v >= n:
+            print(f"Invalid: vertex out of range (0 to {n-1})")
+            return None
+        #  self-loop check
+        if u == v:
+            print("Invalid: self-loop not allowed")
+            return None
+        #  duplicate edge check
+        if G.has_edge(u, v):
+            print("Invalid: duplicate edge")
+            return None
         G.add_edge(u, v)
     return G
 # -------------------------------
@@ -68,14 +84,18 @@ G = input_graph()
 # OUTPUT
 # -------------------------------
 # Step 1: take inputs from user
-start_d = int(input("Enter starting value of d: "))
-end_d = int(input("Enter degeneracy of graph (upper limit): "))
 
-# Step 2: call function
-wd = weak_degeneracy(G, start_d, end_d)
-
-# Step 3: print result
-if wd is None:
-    print("No valid weak degeneracy found in given range")
+if G is None:
+    print("Graph input failed")
 else:
-    print("\nWeak Degeneracy Number <=", wd)
+     start_d = int(input("Enter starting value of d: "))
+     end_d = int(input("Enter degeneracy of graph (upper limit): "))
+
+     # Step 2: call function
+     wd = weak_degeneracy(G, start_d, end_d)
+
+     # Step 3: print result
+     if wd is None:
+      print("No valid weak degeneracy found in given range")
+     else:
+          print("\nWeak Degeneracy Number <=", wd)
